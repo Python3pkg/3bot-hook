@@ -7,7 +7,7 @@ Webhook handler for 3bot workflow execution. Basically for Github and Bitbucket 
 
 ### Stable version from PyPI
 
-	pip install
+	pip install threebot-hook
 
 ### Development version
  

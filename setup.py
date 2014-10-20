@@ -7,12 +7,12 @@ from setuptools import setup
 from os.path import join, dirname
 
 def long_description():
-    
     try:
         return open(join(dirname(__file__), 'README.md')).read()
     except IOError:
         return "LONG_DESCRIPTION Error"
-
+        
+    
 setup(
     name='threebot-hook',
     version='0.1.0',
@@ -31,6 +31,5 @@ setup(
         'Framework :: Django',
         'License :: OSI Approved :: BSD License',
         'Development Status :: 4 - Beta',
-    ],
-    test_suite='tests'
+    ] 
 )
