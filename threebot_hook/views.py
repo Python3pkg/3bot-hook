@@ -86,6 +86,7 @@ class HookView(GenericAPIView):
             for parameter in parameter_list.parameters.all():
                 l_input_dict[parameter.data_type][parameter.name] = parameter.value
             input_dict['%s' % wf_task.id] = l_input_dict
+        
             
         workflow_log = WorkflowLog(workflow=workflow, inputs=input_dict, performed_by=an_user, performed_on=worker)
         workflow_log.save()
@@ -96,7 +97,11 @@ class HookView(GenericAPIView):
         wf_preset.save()
 
         pre_hook_signal.send(HookView, request=request, payload=payload)
-        ans = run_workflow(workflow_log, worker, extra_context={'payload': 'dummy',})
+        
+        workflow_log.inputs['payload'] = payload
+        workflow_log.save()
+        
+        ans = run_workflow(workflow_log, worker)
         resp = {'ans': ans,
                 'workflow_log_exit_code': workflow_log.exit_code,
                 'workflow_log_id': workflow_log.id, 
