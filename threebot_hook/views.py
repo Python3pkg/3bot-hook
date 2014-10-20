@@ -96,7 +96,7 @@ class HookView(GenericAPIView):
         wf_preset.save()
 
         pre_hook_signal.send(HookView, request=request, payload=payload)
-        ans = run_workflow(workflow_log, worker, extra_context={'payload':payload, 'repo': repo, 'info': info})
+        ans = run_workflow(workflow_log, worker, extra_context={'payload': 'dummy',})
         resp = {'ans': ans,
                 'workflow_log_exit_code': workflow_log.exit_code,
                 'workflow_log_id': workflow_log.id, 
