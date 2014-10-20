@@ -23,16 +23,6 @@ Webhook handler for 3bot workflow execution. Basically for Github and Bitbucket 
 	
 
 
-
-"""
-from rest_framework.authtoken.models import Token
-from django.contrib.auth.models import User
-
-an_user = User.objects.get(username="phi")
-token = Token.objects.create(user=an_user)
-print token.key
-"""
-
 ## Credits
 
 This is a adopted and adapted version of S. Andrew Sheppard's [django-github-hook](https://github.com/sheppard/django-github-hook).

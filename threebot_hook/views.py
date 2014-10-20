@@ -11,7 +11,7 @@ from rest_framework.authtoken.models import Token
 
 
 from django.views.decorators.csrf import csrf_exempt
-from .models import Hook, hook_signal
+from .models import Hook, pre_hook_signal, post_hook_signal
 
 from threebot.utils import order_workflow_tasks
 
