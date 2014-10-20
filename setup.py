@@ -21,7 +21,7 @@ setup(
     author='arteria GmbH',
     author_email='admin@arteria.ch',
     packages = ['threebot_hook'],
-    install_requires=['Django', 'djangorestframework'],
+    install_requires=['Django', 'djangorestframework', 'threebot'],
     classifiers=[
         'Intended Audience :: Developers',
         'Programming Language :: Python',
