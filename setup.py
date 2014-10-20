@@ -1,30 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-    :copyright: Copyright 2013 by S. Andrew Sheppard
-    :contact: andrew@wq.io
-"""
+ 
 
 
 from setuptools import setup
 from os.path import join, dirname
 
-LONG_DESCRIPION = """
-Webhooks for GitHub post-receive hooks and other POST requests.
-"""
-
 def long_description():
-    """Return long description from README.rst if it's present
-    because it doesn't get installed."""
+    
     try:
         return open(join(dirname(__file__), 'README.md')).read()
     except IOError:
-        return LONG_DESCRIPTION
+        return "LONG_DESCRIPTION Error"
 
 setup(
     name='threebot-hook',
     version='0.1.0',
-    description='GitHub (& Bitbucket) web hooks for 3bot',
+    description='GitHub (& Bitbucket) webhooks for 3bot',
     long_description=long_description(),
     author='arteria GmbH',
     author_email='admin@arteria.ch',

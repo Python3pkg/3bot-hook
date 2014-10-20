@@ -5,6 +5,7 @@ from django import dispatch
 
 
 from organizations.models import Organization
+
 from threebot.models import Workflow
 from threebot.models import Worker
 from threebot.models import ParameterList
@@ -21,33 +22,25 @@ class Hook(models.Model):
     workflow = models.ForeignKey(Workflow)
     worker = models.ForeignKey(Worker)
     param_list = models.ForeignKey(ParameterList)
- 
- 
-    unique_together = ("workflow", "worker", "param_list")
-
+    
+    
     def get_hook_url(self):
         return "%d-%d-%d-%s" % (self.workflow.id, self.worker.id, self.param_list.id, self.slug)
     
+    
     def __str__(self):
         return "%s (%s)" % (self.get_hook_url(), self.owner)
+    
         
     class Meta():
         verbose_name = _("Hook")
         verbose_name_plural = _("Hooks")
         db_table = 'threebot_hook'
-
+        unique_together = ("workflow", "worker", "param_list")
+        
 
 class HookSignal(dispatch.Signal):
     pass
 
-hook_signal = HookSignal()
-
-
-"""
-from rest_framework.authtoken.models import Token
-from django.contrib.auth.models import User
-
-an_user = User.objects.get(username="phi")
-token = Token.objects.create(user=an_user)
-print token.key
-"""
+pre_hook_signal = HookSignal()
+post_hook_signal = HookSignal()

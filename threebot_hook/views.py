@@ -47,9 +47,7 @@ class HookView(GenericAPIView):
         worker = Worker.objects.get(id=worker_id)
         parameter_list = ParameterList.objects.get(id=param_list_id)
         
-        hook = Hook.objects.get(workflow=workflow, worker=worker, param_list=parameter_list)
-        #TODO: Further security processing on this Hook
-        #TODO: Validate user and team
+        
         
         # Git repo information from post-receive payload
         if request.content_type == "application/json":
@@ -57,7 +55,23 @@ class HookView(GenericAPIView):
         else:
             # Probably application/x-www-form-urlencoded
             payload = json.loads(request.DATA.get("payload", "{}"))
-        print payload
+        
+        info = payload.get('repository', {})
+        repo = info.get('name', None)
+
+        # GitHub: repository['owner'] = {'name': name, 'email': email}
+        # BitBucket: repository['owner'] = name
+        user = info.get('owner', {})
+        if isinstance(user, dict):
+            user = user.get('name', None)
+
+        if not identifier and not repo and not user and not token:
+            raise ParseError("No JSON data or URL argument : cannot identify hook")
+            
+        
+        hook = Hook.objects.get(workflow=workflow, worker=worker, param_list=parameter_list)
+        #TODO: Further security processing on this Hook
+        #TODO: Validate user and team
         
             
         workflow_tasks = order_workflow_tasks(workflow)
@@ -81,62 +95,13 @@ class HookView(GenericAPIView):
         wf_preset.defaults.update({'list_id': parameter_list.id})
         wf_preset.save()
 
+        pre_hook_signal.send(HookView, request=request, payload=payload)
         ans = run_workflow(workflow_log, worker)
-        
         resp = {'ans': ans,
                 'workflow_log_exit_code': workflow_log.exit_code,
                 'workflow_log_id': workflow_log.id, 
                 }
+        post_hook_signal.send(HookView, request=request, payload=payload, resp=resp)
         return Response(resp)
                                         
-"""                                 
-class HookView(GenericAPIView):
-    renderer_classes = [JSONRenderer]
-
-    @csrf_exempt
-    def post(self, request, *args, **kwargs):
-        # Explicit hook name
-        identifier = kwargs.get('identifier', None)
-
-        # Git repo information from post-receive payload
-        if request.content_type == "application/json":
-            payload = request.DATA
-        else:
-            # Probably application/x-www-form-urlencoded
-            payload = json.loads(request.DATA.get("payload", "{}"))
-
-        info = payload.get('repository', {})
-        repo = info.get('name', None)
-
-        # GitHub: repository['owner'] = {'name': name, 'email': email}
-        # BitBucket: repository['owner'] = name
-        user = info.get('owner', {})
-        if isinstance(user, dict):
-            user = user.get('name', None)
-
-        if not name and not repo and not user:
-            raise ParseError(
-                "No JSON data or URL argument : cannot identify hook"
-            )
-
-        # Find and execute registered hook for the given repo, fail silently
-        # if none exist
-        try:
-            hook = None
-            if name:
-                hook = Hook.objects.get(name=name)
-            elif repo and user:
-                hook = Hook.objects.get(user=user, repo=repo)
-            if hook:
-                
-                if hook.path != "send-signal":
-                    hook.execute()
-                else:
-                    hook_signal.send(HookView, info=info, repo=repo, user=user, request=request)
-                    
-        except Hook.DoesNotExist:
-            # If there is not a script defined, then send a HookSignal
-            hook_signal.send(HookView, request=request, payload=payload)
-            logger.debug('Signal {} sent'.format(hook_signal))
-        return Response({})
-"""                                 
+                              
