@@ -7,8 +7,6 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('threebot', '__first__'),
-        ('organizations', '__first__'),
     ]
 
     operations = [
