@@ -101,7 +101,7 @@ class HookView(GenericAPIView):
         workflow_log.inputs['payload'] = payload
         workflow_log.save()
         
-        run_workflow(workflow_log)
+        run_workflow(workflow_log.id)
         resp = {'workflow_log_exit_code': workflow_log.exit_code,
 
                 'workflow_log_id': workflow_log.id, 

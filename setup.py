@@ -15,7 +15,7 @@ def long_description():
     
 setup(
     name='threebot-hook',
-    version='0.1.7',
+    version='0.1.8',
     description='GitHub (& Bitbucket) webhooks for 3bot',
     long_description=long_description(),
     author='arteria GmbH',
