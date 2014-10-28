@@ -22,7 +22,7 @@ class Hook(models.Model):
         return "%d-%d-%d-%s" % (self.workflow.id, self.worker.id, self.param_list.id, self.slug)
 
     def __str__(self):
-        return "%s (%s)" % (self.get_hook_url(), self.owner)
+        return "%s (%d)" % (self.get_hook_url(), self.pk)
 
     class Meta():
         verbose_name = _("Hook")
