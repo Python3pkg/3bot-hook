@@ -101,9 +101,8 @@ class HookView(GenericAPIView):
         workflow_log.inputs['payload'] = payload
         workflow_log.save()
         
-        ans = run_workflow(workflow_log, worker)
-        resp = {'ans': ans,
-                'workflow_log_exit_code': workflow_log.exit_code,
+        run_workflow(workflow_log)
+        resp = {'workflow_log_exit_code': workflow_log.exit_code,
                 'workflow_log_id': workflow_log.id, 
                 }
         post_hook_signal.send(HookView, request=request, payload=payload, resp=resp)
