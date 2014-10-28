@@ -21,7 +21,7 @@ from threebot.models import ParameterList
 from threebot.models import Workflow
 from threebot.models import WorkflowLog
 from threebot.models import WorkflowPreset
-from threebot.runflow import run_workflow
+from threebot.tasks import run_workflow
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -103,6 +103,7 @@ class HookView(GenericAPIView):
         
         run_workflow(workflow_log)
         resp = {'workflow_log_exit_code': workflow_log.exit_code,
+
                 'workflow_log_id': workflow_log.id, 
                 }
         post_hook_signal.send(HookView, request=request, payload=payload, resp=resp)
