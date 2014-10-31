@@ -2,6 +2,9 @@ from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django import dispatch
+from django.contrib.sites.models import Site
+
+from rest_framework.authtoken.models import Token
 
 from threebot.models import Workflow
 from threebot.models import Worker
@@ -23,6 +26,10 @@ class Hook(models.Model):
 
     def __str__(self):
         return "%s (%d)" % (self.get_hook_url(), self.pk)
+
+    def make_full_url(self, user):
+        token, created = Token.objects.get_or_create(user=user)
+        return "https://%s/hooks/%s/%s-%s-%s/" % (Site.objects.get_current().domain, token, self.workflow.id, self.worker.id, self.param_list.id)
 
     class Meta():
         verbose_name = _("Hook")
