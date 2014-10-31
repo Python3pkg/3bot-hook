@@ -1,26 +1,26 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
- 
-
 
 from setuptools import setup
 from os.path import join, dirname
+import threebot_hook as app
+
 
 def long_description():
     try:
         return open(join(dirname(__file__), 'README.md')).read()
     except IOError:
         return "LONG_DESCRIPTION Error"
-        
-    
+
+
 setup(
     name='threebot-hook',
-    version='0.1.8',
+    version=app.__version__,
     description='GitHub (& Bitbucket) webhooks for 3bot',
     long_description=long_description(),
     author='arteria GmbH',
     author_email='admin@arteria.ch',
-    packages = ['threebot_hook'],
+    packages=['threebot_hook'],
     install_requires=['Django', 'djangorestframework', 'threebot'],
     classifiers=[
         'Intended Audience :: Developers',
@@ -31,5 +31,5 @@ setup(
         'Framework :: Django',
         'License :: OSI Approved :: BSD License',
         'Development Status :: 4 - Beta',
-    ] 
+    ]
 )
