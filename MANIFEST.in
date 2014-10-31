@@ -1,3 +1,2 @@
 include README.md
-recursive-include threebot_hook/static *
 recursive-include threebot_hook/templates *
