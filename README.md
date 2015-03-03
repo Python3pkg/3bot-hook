@@ -25,4 +25,4 @@ Webhook handler for 3bot workflow execution. Basically for Github and Bitbucket 
 
 ## Credits
 
-This is a adopted and adapted version of S. Andrew Sheppard's [django-github-hook](https://github.com/sheppard/django-github-hook).
+This is an adopted and adapted version of S. Andrew Sheppard's [django-github-hook](https://github.com/sheppard/django-github-hook).
