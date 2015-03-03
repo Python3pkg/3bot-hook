@@ -44,7 +44,6 @@ class HookView(GenericAPIView):
         workflow_id = identifier.split("-")[0]
         worker_id = identifier.split("-")[1]
         param_list_id = identifier.split("-")[2]
-        slug = "-".join(identifier.split("-")[3:])
 
         an_user = Token.objects.get(key=token).user
         workflow = Workflow.objects.get(id=workflow_id)
@@ -71,6 +70,7 @@ class HookView(GenericAPIView):
             raise ParseError("No JSON data or URL argument : cannot identify hook")
 
         hook = Hook.objects.get(workflow=workflow, worker=worker, param_list=parameter_list)
+
         #TODO: Further security processing on this Hook
         #TODO: Validate user and team
 
@@ -87,7 +87,8 @@ class HookView(GenericAPIView):
                 l_input_dict[parameter.data_type][parameter.name] = parameter.value
             input_dict['%s' % wf_task.id] = l_input_dict
 
-        workflow_log = WorkflowLog(workflow=workflow, inputs=input_dict, performed_by=an_user, performed_on=worker)
+        workflow_log = WorkflowLog(
+            workflow=workflow, inputs=input_dict, outputs={}, performed_by=an_user, performed_on=worker)
         workflow_log.save()
 
         wf_preset, created = WorkflowPreset.objects.get_or_create(user=an_user, workflow=workflow)
